@@ -3,10 +3,30 @@ import './App.css';
 
 import Playlist from '../Playlist/Playlist';
 import SearchResults from '../SearchResults/SearchResults';
+import { authRequest } from '../../utils/spotify';
+
+
 
 
 function App() {
 
+  // localStorage.clear();
+
+  let accessToken = localStorage.getItem('accessToken');
+
+  if(window.location.hash) {
+    const parts = window.location.hash.slice(1).split('&');
+    parts.forEach(part => {
+      const pair = part.split('=');
+      console.log(pair);
+      if (pair[0] === 'access_token') {
+        localStorage.setItem('accessToken', pair[1]);
+      }
+      if (pair[0] === 'expires_in') {
+        localStorage.setItem('expiresIn', pair[1]);
+      }
+    });
+  }
   // temp
   const dummyTracks = [
     {
@@ -61,15 +81,23 @@ function App() {
     console.log(playlistName, ids);
   }
 
-  return (
-    <div className="App">
-      <button onClick={savePlaylist}>Save my playlist</button>
-      <h2>My Playlist</h2>
-      <Playlist name={playlistName} tracks={tracks} handleRemoveTrack={handleRemoveTrack} handlePlaylistNameChange={handlePlaylistNameChange}/>
-      <h2>Track Search Results</h2>
-      <SearchResults tracks={searchResults} handleAddTrack={handleAddTrack} />
-    </div>
-  );
+  const loginToSpotify = () => {
+    authRequest();
+  }
+
+  if (!accessToken) {
+    return <button onClick={loginToSpotify}>Login to Spotify</button>
+  } else {
+    return (
+      <div className="App">
+        <button onClick={savePlaylist}>Save my playlist</button>
+        <h2>My Playlist</h2>
+        <Playlist name={playlistName} tracks={tracks} handleRemoveTrack={handleRemoveTrack} handlePlaylistNameChange={handlePlaylistNameChange}/>
+        <h2>Track Search</h2>
+        <SearchResults tracks={searchResults} handleAddTrack={handleAddTrack} />
+      </div>
+    );
+  }
 }
 
 export default App;
