@@ -1,7 +1,14 @@
 import React from 'react';
 
-function SearchResults() {
-    return <div>search results</div>;
+import Tracklist from '../Tracklist/Tracklist';
+
+function SearchResults({ tracks, handleAddTrack }) {
+    return (
+        <>
+            <Tracklist tracks={tracks} handleAddTrack={handleAddTrack} />
+        </>
+    );
 }
 
 export default SearchResults;
+

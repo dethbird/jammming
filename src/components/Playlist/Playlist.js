@@ -5,7 +5,7 @@ import Tracklist from '../Tracklist/Tracklist';
 function Playlist({ name, tracks }) {
     return (
         <>
-            <div>{ name }</div>
+            <h3>{ name }</h3>
             <Tracklist tracks = { tracks } />
         </>
     );
