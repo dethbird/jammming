@@ -10,8 +10,8 @@ function Track({
             {track.name} |
             {track.artists[0].name} |
             {track.album.name}
-            {handleAddTrack ? <button onClick={() => handleAddTrack(track.id)}>+</button> : null}
-            {handleRemoveTrack ? <button onClick={() => handleRemoveTrack(track.id)}>-</button> : null}
+            {handleAddTrack ? <button onClick={() => handleAddTrack(track.uri)}>+</button> : null}
+            {handleRemoveTrack ? <button onClick={() => handleRemoveTrack(track.uri)}>-</button> : null}
         </div>
     );
 }

@@ -4,7 +4,7 @@ import './App.css';
 import Playlist from '../Playlist/Playlist';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
-import { authRequest, searchTracks } from '../../utils/spotify';
+import { authRequest, searchTracks, savePlaylist } from '../../utils/spotify';
 
 
 
@@ -29,45 +29,26 @@ function App() {
     window.location.hash='';
   }
 
-  // temp
-  const dummyTracks = [
-    {
-      id: 1, name: 'Pizza Party', artist: 'Whatever', album: 'Who cares'
-    },
-    {
-      id: 2, name: 'Music is cool', artist: 'BingBong', album: 'Music5000'
-    }
-  ];
-  const dummyTrackSearch = [
-    {
-      id: 4, name: 'askdjfbaskdjnjdsf', artist: 'OOOskdjfnskdfb', album: 'uuuadsiahsbdb'
-    },
-    {
-      id: 5, name: 'zzzzzbkjbkjhsdbf', artist: 'gfsfgse', album: 'bbbbbbbb'
-    }
-  ];
-  const dummyPlaylistName = 'Super Cool Songs';
-
   const [tracks, setTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleAddTrack = (trackId) => {
+  const handleAddTrack = (uri) => {
     const selectedTrack = searchResults.find(track => {
-      return track.id === trackId
+      return track.uri === uri
     });
     if (selectedTrack) {
       if (!tracks.find(track => {
-        return track.id === trackId
+        return track.uri === uri
       })) {
         setTracks((prev) => [...prev, selectedTrack]);
       }
     }
   };
-  const handleRemoveTrack = (trackId) => {
+  const handleRemoveTrack = (uri) => {
     const newTracks = tracks.filter(track => {
-      return track.id !== trackId
+      return track.uri !== uri
     });
     setTracks(() => newTracks);
   };
@@ -76,11 +57,11 @@ function App() {
     setPlaylistName(() => e.target.value );
   }
 
-  const savePlaylist = () => {
-    const ids = tracks.map(track => {
-      return track.id
+  const handleSavePlaylist = () => {
+    const uris = tracks.map(track => {
+      return track.uri
     });
-    console.log(playlistName, ids);
+    savePlaylist(playlistName, uris, accessToken);
   }
   const loginToSpotify = () => {
     authRequest();
@@ -99,9 +80,8 @@ function App() {
   } else {
     return (
       <div className="App">
-        <button onClick={savePlaylist}>Save my playlist</button>
         <h2>My Playlist</h2>
-        <Playlist name={playlistName} tracks={tracks} handleRemoveTrack={handleRemoveTrack} handlePlaylistNameChange={handlePlaylistNameChange}/>
+        <Playlist name={playlistName} tracks={tracks} handleRemoveTrack={handleRemoveTrack} handlePlaylistNameChange={handlePlaylistNameChange} handleSavePlaylist={ handleSavePlaylist }/>
         <h2>Track Search</h2>
         <SearchBar term={searchTerm} handleUpdateSearchTerm={ handleUpdateSearchTerm} handleClickSearch={handleClickSearch}/>
         <SearchResults tracks={searchResults} handleAddTrack={handleAddTrack} />

@@ -2,7 +2,7 @@ import credentials from '../credentials';
 
 const authorizeUrl = 'https://accounts.spotify.com/authorize';
 const apiBaseUrl = 'https://api.spotify.com';
-const scope = 'user-read-private user-read-email';
+const scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private';
 
 
 let queryParams = ['response_type=token'];
@@ -39,4 +39,54 @@ export const searchTracks = async (term, accessToken) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+export const savePlaylist = async (name, uris, accessToken) => {
+    fetch(`${apiBaseUrl}/v1/me`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('error fetching /me');
+        }
+        return response.json();
+    }).then(userData => {
+        return fetch(`${apiBaseUrl}/v1/users/${userData.id}/playlists`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                name,
+                description: 'A new playlist called ' + name
+            })
+        })
+    }).then(response => {
+        if(!response.ok) {
+            throw new Error ('error creating playlist');
+        }
+        return response.json();
+    }).then(playlist => {
+        return fetch(`${apiBaseUrl}/v1/playlists/${playlist.id}/tracks`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                uris
+            })
+        })
+    }).then(response => {
+        if(!response.ok) {
+            throw new Error ('error adding tracks');
+        }
+        return response.json();
+    }).then(playlist => {
+        console.log(playlist);
+    }).catch(error => {
+        // Handle any errors from any request here
+        console.error('Failed to fetch data:', error);
+    });
 }
