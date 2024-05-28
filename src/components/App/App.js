@@ -54,8 +54,16 @@ function App() {
     setPlaylistName(() => e.target.value );
   }
 
+  const savePlaylist = () => {
+    const ids = tracks.map(track => {
+      return track.id
+    });
+    console.log(playlistName, ids);
+  }
+
   return (
     <div className="App">
+      <button onClick={savePlaylist}>Save my playlist</button>
       <h2>My Playlist</h2>
       <Playlist name={playlistName} tracks={tracks} handleRemoveTrack={handleRemoveTrack} handlePlaylistNameChange={handlePlaylistNameChange}/>
       <h2>Track Search Results</h2>
