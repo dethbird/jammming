@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 
-import Tracklist from '../Tracklist/Tracklist';
+import Playlist from '../Playlist/Playlist';
 
 
 function App() {
@@ -17,9 +17,10 @@ function App() {
   ];
 
   const [ tracks, setTracks ] = useState(dummyTracks);
+
   return (
     <div className="App">
-      <Tracklist tracks={ tracks } />
+      <Playlist name='Super Cool Songs' tracks={ tracks } />
     </div>
   );
 }
