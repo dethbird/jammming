@@ -24,8 +24,10 @@ function App() {
       id: 5, name: 'zzzzzbkjbkjhsdbf', artist: 'gfsfgse', album: 'bbbbbbbb'
     }
   ];
+  const dummyPlaylistName = 'Super Cool Songs';
 
   const [tracks, setTracks] = useState(dummyTracks);
+  const [playlistName, setPlaylistName] = useState(dummyPlaylistName);
   const [searchResults, setSearchResults] = useState(dummyTrackSearch);
 
   const handleAddTrack = (trackId) => {
@@ -48,10 +50,14 @@ function App() {
     setTracks(() => newTracks);
   };
 
+  const handlePlaylistNameChange = (e) => {
+    setPlaylistName(() => e.target.value );
+  }
+
   return (
     <div className="App">
       <h2>My Playlist</h2>
-      <Playlist name='Super Cool Songs' tracks={tracks} handleRemoveTrack={handleRemoveTrack}/>
+      <Playlist name={playlistName} tracks={tracks} handleRemoveTrack={handleRemoveTrack} handlePlaylistNameChange={handlePlaylistNameChange}/>
       <h2>Track Search Results</h2>
       <SearchResults tracks={searchResults} handleAddTrack={handleAddTrack} />
     </div>
