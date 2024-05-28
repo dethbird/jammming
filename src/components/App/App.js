@@ -41,10 +41,17 @@ function App() {
     }
   };
 
+  const handleRemoveTrack = (trackId) => {
+    const newTracks = tracks.filter(track => {
+      return track.id !== trackId
+    });
+    setTracks(() => newTracks);
+  };
+
   return (
     <div className="App">
       <h2>My Playlist</h2>
-      <Playlist name='Super Cool Songs' tracks={tracks} />
+      <Playlist name='Super Cool Songs' tracks={tracks} handleRemoveTrack={handleRemoveTrack}/>
       <h2>Track Search Results</h2>
       <SearchResults tracks={searchResults} handleAddTrack={handleAddTrack} />
     </div>
